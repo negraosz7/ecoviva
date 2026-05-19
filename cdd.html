@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoViva+</title>
+    <style>
+        /* Configurações Gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f9f4;
+            color: #2d4a22;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Menu de Navegação */
+        header {
+            background-color: #2e7d32;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-left: 1.2rem;
+            font-weight: 500;
+            padding: 0.5rem;
+            transition: 0.2s;
+        }
+
+        nav button:hover, nav button.active {
+            text-decoration: underline;
+            color: #a5d6a7;
+        }
+
+        /* Container Principal */
+        main {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .page {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h2 {
+            color: #1b5e20;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e8f5e9;
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: #2e7d32;
+            margin-bottom: 1rem;
+        }
+
+        /* Formulário de Registro */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #c8e6c9;
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: #fafdfa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+
+        .btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 100%;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #388e3c;
+        }
+
+        /* Cartão de Perfil / Pontuação */
+        .profile-card {
+            background: linear-gradient(135deg, #1b5e20, #4caf50);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(27, 94, 32, 0.2);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profile-info h3 {
+            color: white;
+            font-size: 1.6rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .profile-info p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .profile-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .score-box {
+            text-align: right;
+        }
+
+        .score-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: bold;
+            line-height: 1;
+            margin-top: 0.2rem;
+        }
+
+        /* Página Como Funciona */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .step-card {
+            background: #e8f5e9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .material-item {
+            background: #f1f8e9;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            border: 1px solid #dcedc8;
+        }
+
+        /* Listas de Itens (Ganhar e Trocar) */
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .card-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .btn-action {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-action:hover {
+            background-color: #1b5e20;
+        }
+
+        .btn-collect {
+            background-color: #4caf50;
+        }
+        
+        .btn-collect:hover {
+            background-color: #388e3c;
+        }
+
+        /* Seção Histórico / Extrato */
+        .statement-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .statement-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            border-left: 4px solid #ccc;
+            background: #fdfdfd;
+        }
+
+        .statement-item.positive {
+            border-left-color: #4caf50;
+            background: #f0fbf0;
+            color: #1b5e20;
+        }
+
+        .statement-item.negative {
+            border-left-color: #e53935;
+            background: #fff5f5;
+            color: #c62828;
+        }
+
+        .empty-history {
+            color: #777;
+            font-style: italic;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #1b5e20;
+            color: #a5d6a7;
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu Superior -->
+    <header>
+        <div class="logo">🌱 EcoViva+</div>
+        <nav>
+            <button id="nav-register" class="active" onclick="switchPage('register')">Registrar</button>
+            <button id="nav-about" onclick="switchPage('about')">Como Funciona</button>
+            <button id="nav-earn" onclick="switchPage('earn')">Ganhar Pontos</button>
+            <button id="nav-exchange" onclick="switchPage('exchange')">Trocar Moedas</button>
+            <button id="nav-profile" onclick="switchPage('profile')" style="display: none; font-weight: bold; color: #a5d6a7;">👤 Meu Perfil</button>
+        </nav>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main>
+
+        <!-- 1. PÁGINA DE REGISTRO -->
+        <section id="page-register" class="page active">
+            <h2>Crie sua Conta EcoViva+</h2>
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="name">Nome Completo</label>
+                    <input type="text" id="name" required placeholder="Digite seu nome">
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" required placeholder="seuemail@exemplo.com">
+                </div>
+                <button type="submit" class="btn">Cadastrar e Começar</button>
+            </form>
+        </section>
+
+        <!-- 2. PÁGINA COMO FUNCIONA -->
+        <section id="page-about" class="page">
+            <h2>Como Funciona?</h2>
+            <div class="steps">
+                <div class="step-card">
+                    <h3>1. Entregue</h3>
+                    <p>Leve seus materiais recicláveis até um ponto de coleta parceiro.</p>
+                </div>
+                <div class="step-card">
+                    <h3>2. Ganhe</h3>
+                    <p>Receba pontos virtuais (<b>EcoPontos</b>) direto na sua conta.</p>
+                </div>
+                <div class="step-card">
+                    <h3>3. Troque</h3>
+                    <p>Use suas moedas verdes para resgatar prêmios e benefícios.</p>
+                </div>
+            </div>
+
+            <h2>Materiais Aceitos</h2>
+            <br>
+            <div class="materials-grid">
+                <div class="material-item">🍾 Garrafas PET</div>
+                <div class="material-item">🥫 Latinhas</div>
+                <div class="material-item">📦 Papelão</div>
+                <div class="material-item">🛢️ Óleo Usado</div>
+                <div class="material-item">💻 Eletrônicos</div>
+            </div>
+        </section>
+
+        <!-- 3. PÁGINA DE GANHAR PONTOS -->
+        <section id="page-earn" class="page">
+            <h2>Recicle e Ganhe Moedas Verdes</h2>
+            <p style="margin-bottom: 1.5rem;">Simule abaixo a entrega dos seus materiais para acumular pontos:</p>
+            
+            <div class="item-list">
+                <div class="card-item">
+                    <div>
+                        <h4>Garrafas PET</h4>
+                        <p>Rende 5 pontos por unidade</p>
+                    </div>
+                    <button class="btn-action btn-collect" onclick="addPoints(5, 'Garrafas PET')">+5 pts</button>
+                </div>
+                <div class="card-item">
+                    <div>
+                        <h4>Latinhas de Alumínio</h4>
+                        <p>Rende 8 pontos por unidade</p>
+                    </div>
+                    <button class="btn-action btn-collect" onclick="addPoints(8, 'Latinhas')">+8 pts</button>
+                </div>
+                <div class="card-item">
+                    <div>
+                        <h4>Papelão (kg)</h4>
+                        <p>Rende 15 pontos por quilo</p>
+                    </div>
+                    <button class="btn-action btn-collect" onclick="addPoints(15, 'Quilo de Papelão')">+15 pts</button>
+                </div>
+                <div class="card-item">
+                    <div>
+                        <h4>Óleo Usado (Litro)</h4>
+                        <p>Rende 25 pontos por litro</p>
+                    </div>
+                    <button class="btn-action btn-collect" onclick="addPoints(25, 'Litro de Óleo')">+25 pts</button>
+                </div>
+                <div class="card-item">
+                    <div>
+                        <h4>Eletrônicos Velhos</h4>
+                        <p>Rende 50 pontos por equipamento</p>
+                    </div>
+                    <button class="btn-action btn-collect" onclick="addPoints(50, 'Eletrônico')">+50 pts</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. PÁGINA DE TROCAS -->
+        <section id="page-exchange" class="page">
+            <h2>Troca de Moedas Verdes</h2>
+            <p style="margin-bottom: 1.5rem;">Use seu saldo acumulado para resgatar benefícios:</p>
+            
+            <div class="item-list">
+                <div class="card-item">
+                    <div>
+                        <h4>Desconto na Conta de Luz</h4>
+                        <p>R$ 10,00 de bônus na fatura.</p>
+                    </div>
+                    <button class="btn-action" onclick="spendPoints(50, 'Desconto na Conta de Luz')">50 pts</button>
+                </div>
+                <div class="card-item">
+                    <div>
+                        <h4>Cupom União Supermercados</h4>
+                        <p>Vale-compras de R$ 20,00.</p>
+                    </div>
+                    <button class="btn-action" onclick="spendPoints(100, 'Cupom Supermercado')">100 pts</button>
+                </div>
+                <div class="card-item">
+                    <div>
+                        <h4>Ingresso de Cinema</h4>
+                        <p>Sessão padrão de Filmes.</p>
+                    </div>
+                    <button class="btn-action" onclick="spendPoints(150, 'Ingresso de Cinema')">150 pts</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. NOVA PÁGINA DE PERFIL (ONDE VOCÊ VÊ SEUS PONTOS) -->
+        <section id="page-profile" class="page">
+            <h2>Minha Conta EcoViva+</h2>
+            
+            <!-- Cartão Fidelidade com Saldo -->
+            <div class="profile-card">
+                <div class="profile-info">
+                    <h3 id="profile-name">Nome do Usuário</h3>
+                    <p id="profile-email">email@exemplo.com</p>
+                    <span class="profile-badge">🌱 Protetor do Planeta</span>
+                </div>
+                <div class="score-box">
+                    <div class="score-title">Saldo Disponível</div>
+                    <div class="score-value" id="profile-points">0</div>
+                    <div style="font-size: 0.9rem; font-weight: bold;">EcoPontos</div>
+                </div>
+            </div>
+
+            <!-- Extrato integrado no perfil -->
+            <h3>Extrato e Movimentações</h3>
+            <br>
+            <ul class="statement-list" id="history-container">
+                <li class="empty-history" id="empty-msg">Nenhuma movimentação realizada ainda.</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>&copy; 2026 EcoViva+ - Conectando tecnologia e sustentabilidade</p>
+    </footer>
+
+    <!-- Lógica do Sistema (JavaScript) -->
+    <script>
+        let ecoPoints = 0; 
+
+        // Atualiza a contagem visual na tela do perfil
+        function updatePointsDisplay() {
+            document.getElementById('profile-points').innerText = ecoPoints;
+        }
+
+        // Adiciona um item na lista de histórico do extrato
+        function logTransaction(description, amount, type) {
+            const container = document.getElementById('history-container');
+            const emptyMsg = document.getElementById('empty-msg');
+            
+            if (emptyMsg) {
+                emptyMsg.remove();
+            }
+
+            const timeNow = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const li = document.createElement('li');
+            li.className = `statement-item ${type}`;
+            
+            const prefix = type === 'positive' ? '+' : '-';
+            li.innerHTML = `
+                <span>${description} (${timeNow})</span>
+                <b>${prefix}${amount} pts</b>
+            `;
+            
+            container.insertBefore(li, container.firstChild);
+        }
+
+        // Alternar abas
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            document.getElementById(`nav-${pageId}`).classList.add('active');
+        }
+
+        // Ação de Cadastro
+        function handleRegister(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            
+            // injeta os dados do usuário na tela do perfil
+            document.getElementById('profile-name').innerText = name;
+            document.getElementById('profile-email').innerText = email;
+            
+            // Torna o botão do menu "Meu Perfil" visível
+            document.getElementById('nav-profile').style.display = 'inline-block';
+            
+            // Contagem inicial de bônus
+            ecoPoints = 20; 
+            updatePointsDisplay();
+            logTransaction('Bônus de Boas-vindas', 20, 'positive');
+
+            alert(`Cadastro feito! Vá na aba "Meu Perfil" para ver seus pontos.`);
+            switchPage('profile'); // Vai direto para o perfil do usuário
+        }
+
+        // Função para somar na contagem
+        function addPoints(amount, item) {
+            ecoPoints += amount;
+            updatePointsDisplay();
+            logTransaction(`Entrega de ${item}`, amount, 'positive');
+            alert(`+${amount} EcoPontos adicionados ao seu perfil!`);
+        }
+
+        // Função para subtrair na contagem
+        function spendPoints(cost, rewardName) {
+            if (ecoPoints >= cost) {
+                ecoPoints -= cost;
+                updatePointsDisplay();
+                logTransaction(`Troca por ${rewardName}`, cost, 'negative');
+                alert(`Troca efetuada! Verifique seu extrato na aba Meu Perfil.`);
+            } else {
+                alert(`Saldo insuficiente! Você tem ${ecoPoints} pts e precisa de ${cost} pts.`);
+            }
+        }
+    </script>
+</body>
+</html>
